@@ -40,18 +40,25 @@
     }
 
 .icon {
-  width: 150px;        /* più grande */
-  height: 150px;
-  margin: 0 auto 16px; /* 👉 CENTRA */
+  width: auto;
+  height: auto;
+  margin: 0 auto 16px;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
+  background: none;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
 }
 
 .logo-img {
-  width: 100%;         /* riempie tutto */
-  height: 100%;
-  object-fit: contain; /* NON taglia */
+  width: 180px;
+  height: auto;
+  max-width: none;
+  max-height: none;
+  object-fit: contain;
+  display: block;
 }
 
    h1 {
