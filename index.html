@@ -1,43 +1,264 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-  <meta charset="UTF-8">
-  <title>Calcolo Orario Uscita</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Calcola il tuo Orario di Uscita</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: "Segoe UI", Arial, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e8f0ff, #f7f9fc);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      color: #1f2937;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      background: #ffffff;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 20px 50px rgba(31, 41, 55, 0.15);
+      text-align: center;
+    }
+
+    .icon {
+      width: 72px;
+      height: 72px;
+      margin: 0 auto 16px;
+      border-radius: 50%;
+      background: #2563eb;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 34px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 28px;
+      color: #111827;
+    }
+
+    .subtitle {
+      margin: 12px 0 28px;
+      color: #6b7280;
+      font-size: 15px;
+      line-height: 1.5;
+    }
+
+    .card {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 18px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      text-align: left;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #374151;
+    }
+
+    input {
+      width: 100%;
+      padding: 14px;
+      border: 1px solid #d1d5db;
+      border-radius: 14px;
+      font-size: 18px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+    }
+
+    button {
+      width: 100%;
+      margin-top: 16px;
+      padding: 14px 18px;
+      border: none;
+      border-radius: 14px;
+      background: #2563eb;
+      color: white;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    button:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .result {
+      display: none;
+      margin-top: 22px;
+      padding: 22px;
+      border-radius: 18px;
+      background: #ecfdf5;
+      border: 1px solid #bbf7d0;
+    }
+
+    .result small {
+      display: block;
+      color: #047857;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .result strong {
+      font-size: 42px;
+      color: #065f46;
+    }
+
+    .error {
+      display: none;
+      margin-top: 16px;
+      color: #b91c1c;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 600;
+    }
+
+    .info {
+      margin-top: 22px;
+      font-size: 14px;
+      color: #6b7280;
+      line-height: 1.5;
+    }
+
+    .examples {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .example {
+      background: #eef2ff;
+      color: #3730a3;
+      padding: 10px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    footer {
+      margin-top: 24px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 24px;
+      }
+
+      h1 {
+        font-size: 24px;
+      }
+
+      .result strong {
+        font-size: 36px;
+      }
+
+      .examples {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
+
 <body>
-  <h1>Calcola il tuo orario di uscita</h1>
+  <main class="container">
+    <div class="icon">⏰</div>
 
-  <label for="arrivo">Orario di arrivo:</label>
-  <input type="time" id="arrivo">
+    <h1>Calcola il tuo orario di uscita</h1>
 
-  <button onclick="calcola()">Calcola</button>
+    <p class="subtitle">
+      Inserisci l’orario di arrivo e scopri quando puoi uscire,
+      considerando 8 ore di lavoro e 45 minuti di pausa pranzo.
+    </p>
 
-  <h2 id="risultato"></h2>
+    <section class="card">
+      <label for="arrivo">Orario di arrivo</label>
+      <input type="time" id="arrivo" />
+
+      <button onclick="calcolaUscita()">Calcola uscita</button>
+
+      <div id="errore" class="error">
+        Inserisci prima un orario valido.
+      </div>
+
+      <div id="risultato" class="result">
+        <small>Puoi uscire alle</small>
+        <strong id="orarioUscita">--:--</strong>
+      </div>
+    </section>
+
+    <div class="examples">
+      <div class="example">08:00 → 16:45</div>
+      <div class="example">08:30 → 17:15</div>
+      <div class="example">09:00 → 17:45</div>
+    </div>
+
+    <p class="info">
+      Calcolo automatico: <strong>orario arrivo + 8h 45m</strong>
+    </p>
+
+    <footer>
+      Tool interno per il calcolo indicativo dell’orario di uscita.
+    </footer>
+  </main>
 
   <script>
-    function calcola() {
+    function calcolaUscita() {
       const arrivo = document.getElementById("arrivo").value;
+      const risultato = document.getElementById("risultato");
+      const errore = document.getElementById("errore");
+      const orarioUscita = document.getElementById("orarioUscita");
 
       if (!arrivo) {
-        document.getElementById("risultato").innerText =
-          "Inserisci l'orario di arrivo.";
+        errore.style.display = "block";
+        risultato.style.display = "none";
         return;
       }
 
+      errore.style.display = "none";
+
       const [ore, minuti] = arrivo.split(":").map(Number);
 
-      const totaleMinuti = ore * 60 + minuti + (8 * 60) + 45;
+      const totaleMinuti = ore * 60 + minuti + 8 * 60 + 45;
 
-      const oreUscita = Math.floor(totaleMinuti / 60) % 24;
-      const minutiUscita = totaleMinuti % 60;
+      const oreFinali = Math.floor(totaleMinuti / 60) % 24;
+      const minutiFinali = totaleMinuti % 60;
 
       const uscita =
-        String(oreUscita).padStart(2, "0") +
+        String(oreFinali).padStart(2, "0") +
         ":" +
-        String(minutiUscita).padStart(2, "0");
+        String(minutiFinali).padStart(2, "0");
 
-      document.getElementById("risultato").innerText =
-        "Puoi uscire alle: " + uscita;
+      orarioUscita.textContent = uscita;
+      risultato.style.display = "block";
     }
   </script>
 </body>
