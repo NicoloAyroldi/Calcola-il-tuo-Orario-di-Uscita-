@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <title>Calcolo Orario Uscita</title>
+</head>
+<body>
+  <h1>Calcola il tuo orario di uscita</h1>
+
+  <label for="arrivo">Orario di arrivo:</label>
+  <input type="time" id="arrivo">
+
+  <button onclick="calcola()">Calcola</button>
+
+  <h2 id="risultato"></h2>
+
+  <script>
+    function calcola() {
+      const arrivo = document.getElementById("arrivo").value;
+
+      if (!arrivo) {
+        document.getElementById("risultato").innerText =
+          "Inserisci l'orario di arrivo.";
+        return;
+      }
+
+      const [ore, minuti] = arrivo.split(":").map(Number);
+
+      const totaleMinuti = ore * 60 + minuti + (8 * 60) + 45;
+
+      const oreUscita = Math.floor(totaleMinuti / 60) % 24;
+      const minutiUscita = totaleMinuti % 60;
+
+      const uscita =
+        String(oreUscita).padStart(2, "0") +
+        ":" +
+        String(minutiUscita).padStart(2, "0");
+
+      document.getElementById("risultato").innerText =
+        "Puoi uscire alle: " + uscita;
+    }
+  </script>
+</body>
+</html>
